@@ -1,0 +1,24 @@
+{
+  "name": "q9bkbp--run",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "@ant-design/icons": "5.3.7",
+    "@types/react": "18.3.1",
+    "@types/react-dom": "18.3.0",
+    "antd": "5.17.0",
+    "country-flag-icons": "^1.5.12",
+    "firebase-tools": "^13.11.4",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "react-scripts": "latest"
+  }
+}
