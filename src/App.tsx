@@ -14,7 +14,12 @@ import {
   ConfigProvider,
   Button,
 } from "antd";
-import { MoonOutlined, SunOutlined } from "@ant-design/icons";
+import {
+  MoonOutlined,
+  SunOutlined,
+  CheckCircleTwoTone,
+  CloseCircleTwoTone,
+} from "@ant-design/icons";
 import type { TableProps } from "antd";
 import { TableRowSelection } from "antd/es/table/interface";
 import { Content, Footer, Header } from "antd/es/layout/layout";
@@ -82,6 +87,11 @@ const App: React.FC = () => {
     }
   });
 
+  const filters2 = [
+    {text: "Collected" , value: false},
+    {text: "Missing" , value: true},
+  ]
+
   const columns: TableProps<DataType>["columns"] = [
     {
       title: "Sticker #",
@@ -94,6 +104,22 @@ const App: React.FC = () => {
       },
     },
     Table.SELECTION_COLUMN,
+    {
+      title: "Missing",
+      dataIndex: "missing",
+      key: "missing",
+      render: (_, record) => {
+        const { missing } = record;
+        return missing ? (
+          <CloseCircleTwoTone twoToneColor="#eb2f96" style={{ fontSize: 32 }} />
+        ) : (
+          <CheckCircleTwoTone twoToneColor="#52c41a" style={{ fontSize: 32 }} />
+        );
+      },
+      filters: filters2,
+      onFilter: (value, record) =>
+        record.missing === value,
+    },
     {
       title: "Country",
       dataIndex: "country",
