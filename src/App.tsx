@@ -2381,7 +2381,7 @@ const App: React.FC = () => {
         </Header>
         <Content
           style={{
-            padding: "0 48px",
+            padding: "0 12px",
             backgroundColor: isDarkMode ? "black" : "#c3d9f7",
           }}
         >
