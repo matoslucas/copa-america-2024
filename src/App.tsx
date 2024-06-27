@@ -2278,6 +2278,7 @@ const App: React.FC = () => {
       },
     ];
     localStorage.setItem("album", JSON.stringify(album));
+    return album;
   };
 
   const getRowKey = (record: DataType) => {
@@ -2285,19 +2286,21 @@ const App: React.FC = () => {
     return `${country}_${number}`;
   };
 
+  const loadAlbum = (stickers: any) => {
+    const selected = stickers
+      .filter((i: DataType) => !i.missing)
+      .map(getRowKey);
+
+    setSelectedRowKeys(selected);
+    setStickers(stickers);
+  };
+
   React.useEffect(() => {
     const result = localStorage.getItem("album");
     if (result) {
-      const stickers = JSON.parse(result);
-
-      const selected = stickers
-        .filter((i: DataType) => !i.missing)
-        .map(getRowKey);
-
-      setSelectedRowKeys(selected);
-      setStickers(stickers);
+      loadAlbum(JSON.parse(result));
     } else {
-      createAlbum();
+      loadAlbum(createAlbum());
     }
   }, []);
 
