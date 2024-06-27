@@ -88,9 +88,9 @@ const App: React.FC = () => {
   });
 
   const filters2 = [
-    {text: "Collected" , value: false},
-    {text: "Missing" , value: true},
-  ]
+    { text: "Collected", value: false },
+    { text: "Missing", value: true },
+  ];
 
   const columns: TableProps<DataType>["columns"] = [
     {
@@ -117,8 +117,7 @@ const App: React.FC = () => {
         );
       },
       filters: filters2,
-      onFilter: (value, record) =>
-        record.missing === value,
+      onFilter: (value, record) => record.missing === value,
     },
     {
       title: "Country",
@@ -2376,28 +2375,25 @@ const App: React.FC = () => {
             defaultChecked
           />
         </Header>
-        <Content style={{ padding: "0 48px" }}>
+        <Content
+          style={{
+            padding: "0 48px",
+            backgroundColor: isDarkMode ? "black" : "#c3d9f7",
+          }}
+        >
           <Breadcrumb style={{ margin: "16px 0" }}>
             <Breadcrumb.Item>Home</Breadcrumb.Item>
             <Breadcrumb.Item>List</Breadcrumb.Item>
             <Breadcrumb.Item>Album</Breadcrumb.Item>
           </Breadcrumb>
-          <div
-            style={{
-              padding: 24,
-              minHeight: 380,
-              background: colorBgContainer,
-              borderRadius: borderRadiusLG,
-            }}
-          >
-            <Table
-              columns={columns}
-              rowSelection={rowSelectionConfig}
-              dataSource={stickers}
-              rowKey={(record) => getRowKey(record)}
-              pagination={{ defaultPageSize: 22 } as TablePaginationConfig}
-            />
-          </div>
+
+          <Table
+            columns={columns}
+            rowSelection={rowSelectionConfig}
+            dataSource={stickers}
+            rowKey={(record) => getRowKey(record)}
+            pagination={{ defaultPageSize: 22 } as TablePaginationConfig}
+          />
         </Content>
         <Footer style={{ textAlign: "center" }}>
           Collectible Figures ©{new Date().getFullYear()} Created by Lucas
