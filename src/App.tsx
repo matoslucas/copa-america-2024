@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./index.css";
 import getUnicodeFlagIcon from "country-flag-icons/unicode";
 import {
@@ -11,8 +11,10 @@ import {
   Menu,
   Layout,
   theme,
+  ConfigProvider,
+  Button,
 } from "antd";
-
+import { MoonOutlined, SunOutlined } from "@ant-design/icons";
 import type { TableProps } from "antd";
 import { TableRowSelection } from "antd/es/table/interface";
 import { Content, Footer, Header } from "antd/es/layout/layout";
@@ -84,7 +86,7 @@ const App: React.FC = () => {
     {
       title: "Sticker #",
       dataIndex: "id",
-      width: '120px',
+      width: "120px",
       key: "id",
       render: (_, record) => {
         const { country, number } = record;
@@ -96,7 +98,7 @@ const App: React.FC = () => {
       title: "Country",
       dataIndex: "country",
       key: "country",
-      
+
       render: (_, record) => {
         const { country } = record;
         return getContryFlag(country, 32);
@@ -2308,54 +2310,74 @@ const App: React.FC = () => {
 
   const items = [{ key: "copa-america-2024", label: `Copa America 2024` }];
 
+  const { defaultAlgorithm, darkAlgorithm } = theme;
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  const handleClick = () => {
+    setIsDarkMode((previousValue) => !previousValue);
+  };
+
   return (
-    <Layout>
-      <Header
-        style={{
-          position: "sticky",
-          top: 0,
-          zIndex: 1,
-          width: "100%",
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
-        <div className="demo-logo" />
-        <Menu
-          theme="dark"
-          mode="horizontal"
-          defaultSelectedKeys={["2"]}
-          items={items}
-          style={{ flex: 1, minWidth: 0 }}
-        />
-      </Header>
-      <Content style={{ padding: "0 48px" }}>
-        <Breadcrumb style={{ margin: "16px 0" }}>
-          <Breadcrumb.Item>Home</Breadcrumb.Item>
-          <Breadcrumb.Item>List</Breadcrumb.Item>
-          <Breadcrumb.Item>Album</Breadcrumb.Item>
-        </Breadcrumb>
-        <div
+    <ConfigProvider
+      theme={{
+        algorithm: isDarkMode ? darkAlgorithm : defaultAlgorithm,
+      }}
+    >
+      <Layout>
+        <Header
           style={{
-            padding: 24,
-            minHeight: 380,
-            background: colorBgContainer,
-            borderRadius: borderRadiusLG,
+            position: "sticky",
+            top: 0,
+            zIndex: 1,
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
           }}
         >
-          <Table
-            columns={columns}
-            rowSelection={rowSelectionConfig}
-            dataSource={stickers}
-            rowKey={(record) => getRowKey(record)}
-            pagination={{ defaultPageSize: 22 } as TablePaginationConfig}
+          <div className="demo-logo" />
+          <Menu
+            theme="dark"
+            mode="horizontal"
+            defaultSelectedKeys={["2"]}
+            items={items}
+            style={{ flex: 1, minWidth: 0 }}
           />
-        </div>
-      </Content>
-      <Footer style={{ textAlign: "center" }}>
-        Collectible Figures ©{new Date().getFullYear()} Created by Lucas
-      </Footer>
-    </Layout>
+
+          <Switch
+            onChange={handleClick}
+            checkedChildren={<MoonOutlined />}
+            unCheckedChildren={<SunOutlined />}
+            defaultChecked
+          />
+        </Header>
+        <Content style={{ padding: "0 48px" }}>
+          <Breadcrumb style={{ margin: "16px 0" }}>
+            <Breadcrumb.Item>Home</Breadcrumb.Item>
+            <Breadcrumb.Item>List</Breadcrumb.Item>
+            <Breadcrumb.Item>Album</Breadcrumb.Item>
+          </Breadcrumb>
+          <div
+            style={{
+              padding: 24,
+              minHeight: 380,
+              background: colorBgContainer,
+              borderRadius: borderRadiusLG,
+            }}
+          >
+            <Table
+              columns={columns}
+              rowSelection={rowSelectionConfig}
+              dataSource={stickers}
+              rowKey={(record) => getRowKey(record)}
+              pagination={{ defaultPageSize: 22 } as TablePaginationConfig}
+            />
+          </div>
+        </Content>
+        <Footer style={{ textAlign: "center" }}>
+          Collectible Figures ©{new Date().getFullYear()} Created by Lucas
+        </Footer>
+      </Layout>
+    </ConfigProvider>
   );
 };
 
