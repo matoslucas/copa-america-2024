@@ -13,6 +13,7 @@ import {
   theme,
   ConfigProvider,
   Button,
+  Alert,
 } from "antd";
 import {
   MoonOutlined,
@@ -2391,11 +2392,31 @@ const App: React.FC = () => {
           </Breadcrumb>
 
           <Table
+            title={() => {
+              let missing_counter = 0;
+
+              stickers.forEach(({ missing }) => {
+                if (missing) {
+                  missing_counter++;
+                }
+              });
+              return (
+                <Alert
+                  message={
+                    <span>
+                      Missing: <b>{missing_counter}</b> of{" "}
+                      <b>{stickers.length}</b>
+                    </span>
+                  }
+                  type="info"
+                  showIcon
+                />
+              );
+            }}
             columns={columns}
             rowSelection={rowSelectionConfig}
             dataSource={stickers}
             rowKey={(record) => getRowKey(record)}
-            pagination={{ defaultPageSize: 22 } as TablePaginationConfig}
           />
         </Content>
         <Footer style={{ textAlign: "center" }}>
