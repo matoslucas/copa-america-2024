@@ -2412,7 +2412,7 @@ const App: React.FC = () => {
                       <b>{stickers.length}</b>
                     </span>
                   }
-                  description={missing_list.join(", ")}
+                  description={<pre>{missing_list.join("\n")}</pre>}
                   type="info"
                   showIcon
                 />
