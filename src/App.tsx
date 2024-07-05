@@ -2486,13 +2486,28 @@ const App: React.FC = () => {
             title={() => {
               let missing_counter = 0;
               const missing_list: string[] = [];
+              const duplicated_list: string[] = [];
+              const blue_list: string[] = [];
+              const red_list: string[] = [];
 
               stickers.forEach((stiker: DataType) => {
-                const { missing } = stiker;
+                const { missing, duplicated, blue, red } = stiker;
 
                 if (missing) {
                   missing_counter++;
                   missing_list.push(getRowKey(stiker));
+                }
+
+                if (duplicated) {
+                  duplicated_list.push(getRowKey(stiker));
+                }
+
+                if (blue) {
+                  blue_list.push(getRowKey(stiker));
+                }
+
+                if (red) {
+                  red_list.push(getRowKey(stiker));
                 }
               });
               return (
@@ -2503,7 +2518,18 @@ const App: React.FC = () => {
                       <b>{stickers.length}</b>
                     </span>
                   }
-                  description={<pre>{missing_list.join("\n")}</pre>}
+                  description={
+                    <div>
+                      <b>Missing:</b>
+                      <pre>{missing_list.join("\n")}</pre>
+                      <b>Duplicated:</b>
+                      <pre>{duplicated_list.join("\n")}</pre>
+                      <b>Blue:</b>
+                      <pre>{blue_list.join("\n")}</pre>
+                      <b>Red:</b>
+                      <pre>{red_list.join("\n")}</pre>
+                    </div>
+                  }
                   type="info"
                   showIcon
                 />
