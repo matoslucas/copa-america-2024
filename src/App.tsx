@@ -144,10 +144,10 @@ const App: React.FC = () => {
       dataIndex: "duplicated",
       key: "duplicated",
       render: (_, record) => {
-        const { blue } = record;
+        const { duplicated } = record;
         return (
           <Checkbox
-            defaultChecked={blue}
+            defaultChecked={duplicated}
             onChange={(e) => onChange(record, "duplicated", e.target.checked)}
           >
             <CopyOutlined />
