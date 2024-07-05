@@ -2394,20 +2394,25 @@ const App: React.FC = () => {
           <Table
             title={() => {
               let missing_counter = 0;
+              const missing_list: string[] = [];
 
-              stickers.forEach(({ missing }) => {
+              stickers.forEach((stiker: DataType) => {
+                const { missing } = stiker;
+                
                 if (missing) {
                   missing_counter++;
+                  missing_list.push(getRowKey(stiker));
                 }
               });
               return (
                 <Alert
                   message={
                     <span>
-                      Missing: <b>{missing_counter}</b> of{" "}
+                      Missing: <b>{missing_counter}</b> of
                       <b>{stickers.length}</b>
                     </span>
                   }
+                  description={missing_list.join(", ")}
                   type="info"
                   showIcon
                 />
