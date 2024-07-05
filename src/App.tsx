@@ -2,11 +2,8 @@ import React, { useState } from "react";
 import "./index.css";
 import getUnicodeFlagIcon from "country-flag-icons/unicode";
 import {
-  Space,
   Table,
   Switch,
-  TablePaginationConfig,
-  CheckboxProps,
   Breadcrumb,
   Menu,
   Layout,
@@ -14,12 +11,16 @@ import {
   ConfigProvider,
   Button,
   Alert,
+  Checkbox,
+  CheckboxProps,
 } from "antd";
 import {
   MoonOutlined,
   SunOutlined,
   CheckCircleTwoTone,
   CloseCircleTwoTone,
+  TabletTwoTone,
+  CopyOutlined,
 } from "@ant-design/icons";
 import type { TableProps } from "antd";
 import { TableRowSelection } from "antd/es/table/interface";
@@ -30,6 +31,9 @@ interface DataType {
   missing: boolean;
   number: number;
   country: string;
+  duplicated: boolean;
+  red: boolean;
+  blue: boolean;
 }
 
 const App: React.FC = () => {
@@ -93,6 +97,21 @@ const App: React.FC = () => {
     { text: "Missing", value: true },
   ];
 
+  const onChange = (
+    stiker: DataType,
+    key: "red" | "blue" | "duplicated",
+    value: boolean
+  ) => {
+    const updated = stickers.map((s) => {
+      if (s.country === stiker.country && s.number === stiker.number) {
+        s[key] = value;
+      }
+      return s;
+    });
+
+    localStorage.setItem("album", JSON.stringify(updated));
+  };
+
   const columns: TableProps<DataType>["columns"] = [
     {
       title: "Sticker #",
@@ -119,6 +138,54 @@ const App: React.FC = () => {
       },
       filters: filters2,
       onFilter: (value, record) => record.missing === value,
+    },
+    {
+      title: "Duplicated",
+      dataIndex: "duplicated",
+      key: "duplicated",
+      render: (_, record) => {
+        const { blue } = record;
+        return (
+          <Checkbox
+            defaultChecked={blue}
+            onChange={(e) => onChange(record, "duplicated", e.target.checked)}
+          >
+            <CopyOutlined />
+          </Checkbox>
+        );
+      },
+    },
+    {
+      title: "Blue",
+      dataIndex: "blue",
+      key: "blue",
+      render: (_, record) => {
+        const { blue } = record;
+        return (
+          <Checkbox
+            defaultChecked={blue}
+            onChange={(e) => onChange(record, "blue", e.target.checked)}
+          >
+            <TabletTwoTone twoToneColor="blue" />
+          </Checkbox>
+        );
+      },
+    },
+    {
+      title: "Red",
+      dataIndex: "red",
+      key: "red",
+      render: (_, record) => {
+        const { red } = record;
+        return (
+          <Checkbox
+            defaultChecked={red}
+            onChange={(e) => onChange(record, "red", e.target.checked)}
+          >
+            <TabletTwoTone twoToneColor="red" />
+          </Checkbox>
+        );
+      },
     },
     {
       title: "Country",
@@ -2277,7 +2344,14 @@ const App: React.FC = () => {
         number: 18,
         missing: true,
       },
-    ];
+    ].map((s) => {
+      const n = s as DataType;
+
+      n.duplicated = false;
+      n.red = false;
+      n.blue = false;
+      return n;
+    });
     localStorage.setItem("album", JSON.stringify(album));
     return album;
   };
@@ -2296,10 +2370,27 @@ const App: React.FC = () => {
     setStickers(stickers);
   };
 
+  const validateAlbum = (stickers: DataType[]) => {
+    return stickers.map((s) => {
+      if (!s["duplicated"]) {
+        s.duplicated = false;
+      }
+      if (!s["red"]) {
+        s.red = false;
+      }
+
+      if (!s["blue"]) {
+        s.blue = false;
+      }
+
+      return s;
+    });
+  };
+
   React.useEffect(() => {
     const result = localStorage.getItem("album");
     if (result) {
-      loadAlbum(JSON.parse(result));
+      loadAlbum(validateAlbum(JSON.parse(result)));
     } else {
       loadAlbum(createAlbum());
     }
@@ -2398,7 +2489,7 @@ const App: React.FC = () => {
 
               stickers.forEach((stiker: DataType) => {
                 const { missing } = stiker;
-                
+
                 if (missing) {
                   missing_counter++;
                   missing_list.push(getRowKey(stiker));
