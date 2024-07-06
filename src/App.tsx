@@ -2519,7 +2519,12 @@ const App: React.FC = () => {
                     </span>
                   }
                   description={
-                    <div>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-evenly",
+                      }}
+                    >
                       <b>Missing:</b>
                       <pre>{missing_list.join("\n")}</pre>
                       <b>Duplicated:</b>
